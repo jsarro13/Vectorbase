@@ -1,0 +1,16 @@
+#
+# minimal config file
+#
+# not enough to make a fully functional i_investigation sheet
+# see test-01-full-inv.yaml for that
+#
+
+study_identifier : ggg
+study_title : ggg
+
+
+#
+# list the species expected to be identified
+# and their VBsp:nnnnnnn ontology term accessions
+#
+study_species :

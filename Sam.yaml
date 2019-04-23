@@ -1,0 +1,19 @@
+#
+# minimal config file
+#
+# not enough to make a fully functional i_investigation sheet
+# see test-01-full-inv.yaml for that
+#
+
+study_identifier : Sam_is
+study_title : sam
+
+
+#
+# list the species expected to be identified
+# and their VBsp:nnnnnnn ontology term accessions
+#
+study_species :
+  Aedes abserratus : VBsp:0000962
+  Aedes bicristatus : VBsp:0000984
+  Aedes aurifer : VBsp:0000979

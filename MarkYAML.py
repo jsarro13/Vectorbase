@@ -2,14 +2,110 @@
 #MarkYAML v1 04-18-2019
 #Written by Joseph Sarro
 #This is an interactive script to make a YAML file. To run type "python MarkYAML.py"
-#Last edit 04-18-2019
+#Last edit 04-23-2019
 import os
+import argparse
+##define options
+parser = argparse.ArgumentParser(description='Generate a yaml file.')
+parser.add_argument('-C', type=str,
+                   help='Fully specifed config file y/n. (Default: n)')
+parser.add_argument('-sid', type=str,
+                   help='Study ID.')
+parser.add_argument('-st', type=str,
+                   help='Study title.')
+parser.add_argument('-t', type=str, required=True,
+                   help='List of trap types seperated by commas. Please enter within "" if there are spaces  i.e. "this has,a,space"')
+#parser.add_argument('-T', type=file,
+ #                  help='file containing a comma seperated list of trap types')
+parser.add_argument('-a', type=str, required=True,
+                   help='List of attractants sperated by commas. Please enter within "" if there are spaces  i.e. "this has,a,space"')
+#parser.add_argument('-A', type=file,
+ #                  help='file containing a comma seperated list of attractants')
+parser.add_argument('-s', type=str, required=True,
+                   help='List of species sperated by commas. Please enter within "" if there are spaces  i.e. "this has,a,space"')
+#parser.add_argument('-S', type=file,
+ #                  help='file containing a comma seprated list of species')
+parser.add_argument('-i', type=str, required=True,
+                   help='Species identification method. Seperate by commas if there are multiple. Please enter within "" if there are spaces  i.e. "this has,a,space"')
+parser.add_argument('-d', type=str, required=True,
+                   help='Developmental stage. Seperate by commas if there are multiple.')
+parser.add_argument('-g', type=str,
+                   help='Feeding and gonotrophic status. Usage example:"freshly fed female insect"')
+parser.add_argument('-x', type=str, required=True,
+                   help='Sex. Seperate by commas if there are multiple.')
+parser.add_argument('-o', type=str, required=True,
+                   help='Output file name.')
+args = parser.parse_args()
+#print(args.accumulate(args.integers))
+#print args.t
+#end define options
 #f = open('2017_full_Data.txt', 'r')
-print "Enter a file name."
-G= open('SAF_2017.out.txt','w')
-file = raw_input("")
-G= open(file,'w')
+#print "Enter a file name."
+G= open(args.o,'w')
+#file = raw_input("")
+#G= open(file,'w')
 #being dictionary creations#
+gon_dic={
+"  unfed female insect : VSMO:0000210",
+"  fed female insect : VSMO:0000218",
+"  fed and gravid female insect : VSMO:0000208",
+"  freshly fed female insect : VSMO:0000207"
+}
+stage_dic={
+"  adult : IDOMAL:0000655",
+"  larva : IDOMAL:0000653"
+}
+id_dic={
+"  - study_protocol_name : MORPHO"
+  "  study_protocol_type : morphological identification"
+  "  study_protocol_type_term_source_ref : MIRO"
+  "  study_protocol_type_term_accession_number : 30000039"
+  "  study_protocol_description :"
+  "  Mosquitoes were identified using morphological identification**"
+}
+trap_dic={
+"   - study_protocol_name : NJLT"
+   "   study_protocol_type : new jersey trap catch"
+   "   study_protocol_type_term_source_ref : IRO"
+    "  study_protocol_type_term_accession_number : 0000031"
+    "  study_protocol_description :"
+     "   Mosquitoes were caught using a New Jersey light trap**"
+
+"   - study_protocol_name : CDCLIGHT"
+    "  study_protocol_type : CDC light trap"
+    "  study_protocol_type_term_source_ref : VSMO"
+    "  study_protocol_type_term_accession_number : 0000727"
+    "  study_protocol_description :"
+      "  Mosquitoes were caught using a CDC light trap", 
+
+"   - study_protocol_name : GRAVID"
+    "  study_protocol_type : CDC gravid trap"
+    "  study_protocol_type_term_source_ref : VSMO"
+    "  study_protocol_type_term_accession_number : 0001510"
+    "  study_protocol_description :"
+      "  Mosquitoes were caught using a gravid trap",
+
+"   - study_protocol_name : BGSENT"
+    "  study_protocol_type : BG-Sentinel trap"
+    "  study_protocol_type_term_source_ref : VSMO"
+    "  study_protocol_type_term_accession_number : 0001906"
+    "  study_protocol_description :"
+      "  Mosquitoes were caught using a Biogents BG-Sentinel trap" 
+}
+att_dic={
+"  light : IRO:0000139",
+"  CO2 : IRO:0000035",
+"  BG-lure : IRO:0001060",
+"  No attractant used : IRO:0000153",
+"  hay or grass infusion: IRO:0000037",
+"  alfalfa infusion : IRO:0001059",
+"  octenol : IRO:0000036"
+}
+sex_dic={
+"  female : PATO:0000383",
+"  male : PATO:0000384",
+"  mixed sex : PATO:0001338"
+}
 species_dic={
 "  Aedes aboriginis : VBsp:0000961",
 "  Aedes abserratus : VBsp:0000962",
@@ -54,6 +150,8 @@ species_dic={
 "  Aedes infirmatus : VBsp:0001059",
 "  Aedes intrudens : VBsp:0001061",
 "  Aedes j. japonicus : VBsp:0000761",
+"  Aedes japonicus : VBsp:0000761",
+"  Aedes japonicus complex : VBsp:0000761",
 "  Aedes melanimon : VBsp:0001077",
 "  Aedes mercurator : VBsp:0001079",
 "  Aedes mitchellae : VBsp:0001081",
@@ -116,8 +214,7 @@ species_dic={
 "  Anopheles perplexens : VBsp:0003416",
 "  Anopheles pseudopunctipennis : VBsp:0003429",
 "  Anopheles punctipennis : VBsp:0003439",
-"  Anopheles quadrimaculatus s.l. ",
-"  Anopheles quadrimaculatus s.s. ",
+"  Anopheles quadrimaculatus : VBsp:0003441",
 "  Anopheles smaragdinus : VBsp:0003441",
 "  Anopheles sp. : VBsp:0000015",
 "  Anopheles walkeri : VBsp:0003469",
@@ -144,7 +241,7 @@ species_dic={
 "  Culex peccator : VBsp:0003103",
 "  Culex pilosus : VBsp:0003110",
 "  Culex pipiens : VBsp:0002641",
-"  Culex pipiens-restuans (Mixed) ",
+"  Culex pipiens morphological group : VBsp:0003847",
 "  Culex quinquefasciatus : VBsp:0002654",
 "  Culex reevesi : VBsp:0003216",
 "  Culex restuans : VBsp:0002657",
@@ -209,20 +306,22 @@ species_dic={
 #End dictionary creations
 #line = f.readline()
 #print >> G, "tester"
-print "Will this be a fully specified config file?"
-full=raw_input("(y/n)")
+#print "Will this be a fully specified config file?"
+#full=raw_input("(y/n)")
 #print full
 #Note: This does not work on first input. Look into this.
-if (full !="y") or (full !="n"):
-	FULL = False
-	while FULL == False:
-		print "please enter y or n."
-		full=raw_input("(y/n)")
-		if full =="y" or full =="n":
-			FULL=True
+#if (full !="y") or (full !="n"):
+#	FULL = False
+#	while FULL == False:
+#		print "please enter y or n."
+#		full=raw_input("(y/n)")
+#		if full =="y" or full =="n":
+#			FULL=True
+full=args.C
 if full=="y":
 	print "Yes"
-elif full=="n":
+#elif full=="n":
+else:
 	#print "No"
 	#print >> G, "tester"
 	print >> G, "#"
@@ -232,11 +331,13 @@ elif full=="n":
 	print >> G, "# see test-01-full-inv.yaml for that"
 	print >> G, "#"
 	print >> G, ""
-	print "Enter study indentifier."
-	study_id=raw_input("")
+	#print "Enter study indentifier."
+	#study_id=raw_input("")
+	study_id=args.sid
 	print >> G, "study_identifier :",study_id
-	print "Enter study title."
-	study_title=raw_input("")
+	#print "Enter study title."
+	#study_title=raw_input("")
+	study_title=args.st
 	print >> G, "study_title :",study_title
 	print >> G, ""
 	print >> G, ""
@@ -245,12 +346,81 @@ elif full=="n":
 	print >> G, "# and their VBsp:nnnnnnn ontology term accessions"
 	print >> G, "#"
 	print >> G, "study_species :"
-	print "Enter comma seperated list of species. Do not add spaces in between."
-	species_list=raw_input("")
+	#print "Enter comma seperated list of species. Do not add spaces in between."
+	#species_list=raw_input("")
+	species_list=args.s
 	sp_split=species_list.split(",")
 	for sp in sp_split:
 		#print(sp)
+		found=False
 		for spdic in species_dic:
 			if sp in spdic:
+				found=True
 				print >> G, spdic
+		if found==False:
+				print "Warning:",sp, "not found in species dictionary."
+	print >> G, ""
+	print >> G, "#"
+	print >> G, "# list the expected sexes, with ontology term accessions"
+	print >> G, "#"
+	print >> G, "study_sexes :"
+	sex_list=args.x
+	sp_sex=sex_list.split(",")
+	for sp in sp_sex:
+		found=False
+                #print(sp)
+                for sxdic in sex_dic:
+                        if sp in sxdic:
+				found=True
+                                print >> G, sxdic
+				break
+		if found==False:
+                	print "Warning:",sp, "not found in sex dictionary."
+	print >> G, ""
+	print >> G, "#"
+	print >> G, "# list the expected developmental stages, with ontology term accessions"
+	print >> G, "#"
+	print >> G, "study_developmental_stages :"
+	stage_list=args.d
+	sp_stage=stage_list.split(",")
+	for sp in sp_stage:
+                #print(sp)
+		found=False
+                for stdic in stage_dic:
+                        if sp in stdic:
+				found=True
+                                print >> G, stdic
+		if found==False:
+                	print "Warning:",sp, "not found in stage dictionary."
+	print >> G, ""
+	print >> G, "#"
+	print >> G, "# list any ontology terms used in the data sheet"
+	print >> G, "# for location_{country,ADM1,ADM2,description}, attractant"
+	print >> G, "# also the 'pool' term must be provided"
+	print >> G, "#"
+	print >> G, "study_terms :"
+	print >> G, "  pool : EFO:0000663"
+	att_list=args.a
+	sp_att=att_list.split(",")
+	for sp in sp_att:
+                #print(sp)
+		found=False
+                for attdic in att_dic:
+                        if sp in attdic:
+				found=True
+                                print >> G, attdic
+		if found==False:
+			print "Warning:",sp, "not found in attractant dictionary."
+	gon_list=args.g
+	if gon_list is not None:
+		sp_gon=gon_list.split(",")
+        	for sp in sp_gon:
+                	#print(sp)
+			found=False
+                	for gondic in gon_dic:
+                        	if sp in gondic:
+					found=True
+                                	print >> G, gondic
+		if found==False:
+                	print "Warning:",sp, "not found in feeding and gonotrophic dictionary."
 G.close()
