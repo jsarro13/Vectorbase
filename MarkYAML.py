@@ -1,12 +1,15 @@
 #/usr/bin/python
 #MarkYAML v1 04-18-2019
 #Written by Joseph Sarro
-#This is an interactive script to make a YAML file. To run type "python MarkYAML.py"
-#Last edit 04-23-2019
+#This a script to make a YAML file. 
+#Uodates: 
+#04-23-2019: Changed interactive questions into options
+#04-24-2019: Added study protocol functionality
+#04-25-2019: Made dictionary lookup non case sensitive.
 import os
 import argparse
 ##define options
-parser = argparse.ArgumentParser(description='Generate a yaml file.')
+parser = argparse.ArgumentParser(description='Generate a yaml file. Example usage: python MarkYAML.py -sid "2018-Marion_County_Public_Health_Deparment_surveillance" -st "Marrion_County_data" -t NJLT -a light -y 2018 -s "BLANK,Culex pipiens,Culex restuans,Culex pipiens morphological group,Culex territans,Culiseta inornata,Anopheles punctipennis,Anopheles quadrimaculatus,Aedes vexans,Aedes trivittatus,Aedes grossbecki,Aedes japonicus complex,Aedes triseriatus,Orthopodomyia signifera,Psorophora ferox,Coquillettidia perturbans,Uranotaenia sapphirina,Culex erraticus,Aedes albopictus,Psorophora columbiae,Anopheles crucians,Anopheles barberi,Psorophora howardii,Psorophora ciliata,Anopheles earlei" -i morphological -d adult -x female,male -C n -o name.yaml')
 parser.add_argument('-C', type=str,
                    help='Fully specifed config file y/n. (Default: n)')
 parser.add_argument('-sid', type=str,
@@ -33,6 +36,8 @@ parser.add_argument('-g', type=str,
                    help='Feeding and gonotrophic status. Usage example:"freshly fed female insect"')
 parser.add_argument('-x', type=str, required=True,
                    help='Sex. Seperate by commas if there are multiple.')
+parser.add_argument('-y', type=int, required=True,
+                   help='Year.')
 parser.add_argument('-o', type=str, required=True,
                    help='Output file name.')
 args = parser.parse_args()
@@ -56,41 +61,41 @@ stage_dic={
 "  larva : IDOMAL:0000653"
 }
 id_dic={
-"  - study_protocol_name : MORPHO"
-  "  study_protocol_type : morphological identification"
-  "  study_protocol_type_term_source_ref : MIRO"
-  "  study_protocol_type_term_accession_number : 30000039"
-  "  study_protocol_description :"
-  "  Mosquitoes were identified using morphological identification**"
+"  - study_protocol_name : MORPHO\n"
+   "    study_protocol_type : morphological identification\n"
+   "    study_protocol_type_term_source_ref : MIRO\n"
+   "    study_protocol_type_term_accession_number : 30000039\n"
+   "    study_protocol_description :\n"
+   "      Mosquitoes were identified using morphological identification**\n"
 }
 trap_dic={
-"   - study_protocol_name : NJLT"
-   "   study_protocol_type : new jersey trap catch"
-   "   study_protocol_type_term_source_ref : IRO"
-    "  study_protocol_type_term_accession_number : 0000031"
-    "  study_protocol_description :"
-     "   Mosquitoes were caught using a New Jersey light trap**"
+"  - study_protocol_name : NJLT\n"
+   "    study_protocol_type : new jersey trap catch\n"
+   "    study_protocol_type_term_source_ref : IRO\n"
+   "    study_protocol_type_term_accession_number : 0000031\n"
+   "    study_protocol_description :\n"
+   "      Mosquitoes were caught using a New Jersey light trap**\n",
 
-"   - study_protocol_name : CDCLIGHT"
-    "  study_protocol_type : CDC light trap"
-    "  study_protocol_type_term_source_ref : VSMO"
-    "  study_protocol_type_term_accession_number : 0000727"
-    "  study_protocol_description :"
-      "  Mosquitoes were caught using a CDC light trap", 
+"  - study_protocol_name : CDCLIGHT\n"
+    "    study_protocol_type : CDC light trap\n"
+    "    study_protocol_type_term_source_ref : VSMO\n"
+    "    study_protocol_type_term_accession_number : 0000727\n"
+    "    study_protocol_description :\n"
+    "      Mosquitoes were caught using a CDC light trap\n", 
 
-"   - study_protocol_name : GRAVID"
-    "  study_protocol_type : CDC gravid trap"
-    "  study_protocol_type_term_source_ref : VSMO"
-    "  study_protocol_type_term_accession_number : 0001510"
-    "  study_protocol_description :"
-      "  Mosquitoes were caught using a gravid trap",
+"  - study_protocol_name : GRAVID\n"
+    "    study_protocol_type : CDC gravid trap\n"
+    "    study_protocol_type_term_source_ref : VSMO\n"
+    "    study_protocol_type_term_accession_number : 0001510\n"
+    "    study_protocol_description :\n"
+    "      Mosquitoes were caught using a gravid trap\n",
 
-"   - study_protocol_name : BGSENT"
-    "  study_protocol_type : BG-Sentinel trap"
-    "  study_protocol_type_term_source_ref : VSMO"
-    "  study_protocol_type_term_accession_number : 0001906"
-    "  study_protocol_description :"
-      "  Mosquitoes were caught using a Biogents BG-Sentinel trap" 
+"  - study_protocol_name : BGSENT\n"
+    "    study_protocol_type : BG-Sentinel trap\n"
+    "    study_protocol_type_term_source_ref : VSMO\n"
+    "    study_protocol_type_term_accession_number : 0001906\n"
+    "    study_protocol_description :\n"
+    "      Mosquitoes were caught using a Biogents BG-Sentinel trap\n" 
 }
 att_dic={
 "  light : IRO:0000139",
@@ -121,7 +126,7 @@ species_dic={
 "  Aedes burgeri : VBsp:0001180",
 "  Aedes c. canadensis : VBsp:0000996",
 "  Aedes c. mathesoni : VBsp:0000997",
-"  Aedes campestris : VBsp:0000994",
+
 "  Aedes cantator : VBsp:0001000",
 "  Aedes cataphylla : VBsp:0001004",
 "  Aedes churchillensis : VBsp:0001007",
@@ -339,8 +344,33 @@ else:
 	#study_title=raw_input("")
 	study_title=args.st
 	print >> G, "study_title :",study_title
+	print >> G, "study_submission_date :",args.y
+	print >> G, "study_description :"
 	print >> G, ""
-	print >> G, ""
+	print >> G, "study_protocols :"
+	trap_list=args.t
+	t_split=trap_list.split(",")
+        for sp in t_split:
+                #print(sp)
+                found=False
+                for tdic in trap_dic:
+                	if sp.lower() in tdic.lower():
+                        	found=True
+                        	print >> G, tdic
+				break
+		if found==False:
+                	print "Warning:",sp, "not found in trap dictionary."
+	id_list=args.i
+        idmeth_split=id_list.split(",")
+        for sp in idmeth_split:
+                #print(sp)
+                found=False
+                for idic in id_dic:
+                        if sp.lower() in idic.lower():
+                                found=True
+                                print >> G, idic
+                if found==False:
+                        print "Warning:",sp, "not found in identification method dictionary."
 	print >> G, "#"
 	print >> G, "# list the species expected to be identified"
 	print >> G, "# and their VBsp:nnnnnnn ontology term accessions"
@@ -354,7 +384,7 @@ else:
 		#print(sp)
 		found=False
 		for spdic in species_dic:
-			if sp in spdic:
+			if sp.lower() in spdic.lower():
 				found=True
 				print >> G, spdic
 		if found==False:
@@ -370,7 +400,7 @@ else:
 		found=False
                 #print(sp)
                 for sxdic in sex_dic:
-                        if sp in sxdic:
+                        if sp.lower() in sxdic.lower():
 				found=True
                                 print >> G, sxdic
 				break
@@ -387,7 +417,7 @@ else:
                 #print(sp)
 		found=False
                 for stdic in stage_dic:
-                        if sp in stdic:
+                        if sp.lower() in stdic.lower():
 				found=True
                                 print >> G, stdic
 		if found==False:
@@ -406,7 +436,7 @@ else:
                 #print(sp)
 		found=False
                 for attdic in att_dic:
-                        if sp in attdic:
+                        if sp.lower() in attdic.lower():
 				found=True
                                 print >> G, attdic
 		if found==False:
@@ -418,7 +448,7 @@ else:
                 	#print(sp)
 			found=False
                 	for gondic in gon_dic:
-                        	if sp in gondic:
+                        	if sp.lower() in gondic.lower():
 					found=True
                                 	print >> G, gondic
 		if found==False:
