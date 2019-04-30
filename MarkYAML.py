@@ -6,6 +6,7 @@
 #04-23-2019: Changed interactive questions into options
 #04-24-2019: Added study protocol functionality
 #04-25-2019: Made dictionary lookup non case sensitive.
+#04-30-2019: Added functionallity for full config file option. 
 import os
 import argparse
 ##define options
@@ -324,7 +325,147 @@ species_dic={
 #			FULL=True
 full=args.C
 if full=="y":
-	print "Yes"
+	#print "Yes"
+        #print >> G, "tester"
+	#
+	print >> G, "# fully specified config file"
+	print >> G, "#"
+	print >> G, "# contains everything needed to convert SAF files to full ISA-Tab"
+	print >> G, ""
+
+	print >> G, "study_publications : 10.5281/zenodo.1220222"
+  	print >> G, " - study_publication_doi : "
+	print >> G, "   study_publication_author_list : Smith J and Walker M"
+	print >> G, "   study_publication_title : Collection of Aedes species in XYZ"
+	print >> G, "   study_publication_status : unpublished"
+ 	print >> G, "   study_publication_status_term_source_ref : VBcv"
+	print >> G, "   study_publication_status_term_accession_number : 0000233"
+	print >> G, "   comments :"
+	print >> G, "     URL : http://smithandwalkerlab.com/aedes-data"
+	print >> G, ""
+	print >> G, "study_contacts :"
+	print >> G, "  - study_person_last_name : Smith"
+	print >> G, "    study_person_first_name : John"
+	print >> G, "    study_person_email : john@smith.com"
+	print >> G, "    study_person_address : Smith's University, Smithson, NM, USA"
+	print >> G, ""
+	#print "Enter study indentifier."
+	#study_id=raw_input("")
+	study_id=args.sid
+	print >> G, "study_identifier :",study_id
+	#print "Enter study title."
+	#study_title=raw_input("")
+	study_title=args.st
+	print >> G, "study_title :",study_title
+	print >> G, "study_submission_date :",args.y
+	print >> G, "study_description :"
+	print >> G, ""
+	print >> G, "study_protocols :"
+	trap_list=args.t
+	t_split=trap_list.split(",")
+        for sp in t_split:
+                #print(sp)
+                found=False
+                for tdic in trap_dic:
+                	if sp.lower() in tdic.lower():
+                        	found=True
+                        	print >> G, tdic
+				break
+		if found==False:
+                	print "Warning:",sp, "not found in trap dictionary."
+	id_list=args.i
+        idmeth_split=id_list.split(",")
+        for sp in idmeth_split:
+                #print(sp)
+                found=False
+                for idic in id_dic:
+                        if sp.lower() in idic.lower():
+                                found=True
+                                print >> G, idic
+                if found==False:
+                        print "Warning:",sp, "not found in identification method dictionary."
+	print >> G, "#"
+	print >> G, "# list the species expected to be identified"
+	print >> G, "# and their VBsp:nnnnnnn ontology term accessions"
+	print >> G, "#"
+	print >> G, "study_species :"
+	#print "Enter comma seperated list of species. Do not add spaces in between."
+	#species_list=raw_input("")
+	species_list=args.s
+	sp_split=species_list.split(",")
+	for sp in sp_split:
+		#print(sp)
+		found=False
+		for spdic in species_dic:
+			if sp.lower() in spdic.lower():
+				found=True
+				print >> G, spdic
+		if found==False:
+				print "Warning:",sp, "not found in species dictionary."
+	print >> G, ""
+	print >> G, "#"
+	print >> G, "# list the expected sexes, with ontology term accessions"
+	print >> G, "#"
+	print >> G, "study_sexes :"
+	sex_list=args.x
+	sp_sex=sex_list.split(",")
+	for sp in sp_sex:
+		found=False
+                #print(sp)
+                for sxdic in sex_dic:
+                        if sp.lower() in sxdic.lower():
+				found=True
+                                print >> G, sxdic
+				break
+		if found==False:
+                	print "Warning:",sp, "not found in sex dictionary."
+	print >> G, ""
+	print >> G, "#"
+	print >> G, "# list the expected developmental stages, with ontology term accessions"
+	print >> G, "#"
+	print >> G, "study_developmental_stages :"
+	stage_list=args.d
+	sp_stage=stage_list.split(",")
+	for sp in sp_stage:
+                #print(sp)
+		found=False
+                for stdic in stage_dic:
+                        if sp.lower() in stdic.lower():
+				found=True
+                                print >> G, stdic
+		if found==False:
+                	print "Warning:",sp, "not found in stage dictionary."
+	print >> G, ""
+	print >> G, "#"
+	print >> G, "# list any ontology terms used in the data sheet"
+	print >> G, "# for location_{country,ADM1,ADM2,description}, attractant"
+	print >> G, "# also the 'pool' term must be provided"
+	print >> G, "#"
+	print >> G, "study_terms :"
+	print >> G, "  pool : EFO:0000663"
+	att_list=args.a
+	sp_att=att_list.split(",")
+	for sp in sp_att:
+                #print(sp)
+		found=False
+                for attdic in att_dic:
+                        if sp.lower() in attdic.lower():
+				found=True
+                                print >> G, attdic
+		if found==False:
+			print "Warning:",sp, "not found in attractant dictionary."
+	gon_list=args.g
+	if gon_list is not None:
+		sp_gon=gon_list.split(",")
+        	for sp in sp_gon:
+                	#print(sp)
+			found=False
+                	for gondic in gon_dic:
+                        	if sp.lower() in gondic.lower():
+					found=True
+                                	print >> G, gondic
+		if found==False:
+                	print "Warning:",sp, "not found in feeding and gonotrophic dictionary."
 #elif full=="n":
 else:
 	#print "No"
