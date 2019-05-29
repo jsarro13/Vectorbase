@@ -7,6 +7,7 @@
 #04-24-2019: Added study protocol functionality
 #04-25-2019: Made dictionary lookup non case sensitive.
 #04-30-2019: Added functionallity for full config file option. 
+#05-29-2019: Added live bait and chicken to attractants
 import os
 import argparse
 ##define options
@@ -106,6 +107,8 @@ att_dic={
 "  hay or grass infusion: IRO:0000037",
 "  alfalfa infusion : IRO:0001059",
 "  octenol : IRO:0000036"
+"  live animal bait: IRO : 0000157"
+"  live chicken bait: IRO : 0000158"
 }
 sex_dic={
 "  female : PATO:0000383",
