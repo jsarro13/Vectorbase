@@ -8,6 +8,9 @@
 #04-25-2019: Made dictionary lookup non case sensitive.
 #04-30-2019: Added functionallity for full config file option. 
 #05-29-2019: Added live bait and chicken to attractants
+#05-30-2019: Added species and trap type options
+#06-4-2019:  Added new species info and trap options
+#06-5-2019:  Added new species
 import os
 import argparse
 ##define options
@@ -97,7 +100,21 @@ trap_dic={
     "    study_protocol_type_term_source_ref : VSMO\n"
     "    study_protocol_type_term_accession_number : 0001906\n"
     "    study_protocol_description :\n"
-    "      Mosquitoes were caught using a Biogents BG-Sentinel trap\n" 
+    "      Mosquitoes were caught using a Biogents BG-Sentinel trap\n",
+
+"  - study_protocol_name : Collection\n"
+    "    study_protocol_type : collection of arthropods\n"
+    "    study_protocol_type_term_source_ref : VSMO\n"
+    "    study_protocol_type_term_accession_number : 0001445\n"
+    "    study_protocol_description :\n"
+    "      The process of gathering arthropod specimens.\n",
+
+"  - study_protocol_name : Exit\n"
+    "    study_protocol_type : trap containing small non-human animal bait\n"
+    "    study_protocol_type_term_source_ref : VSMO\n"
+    "    study_protocol_type_term_accession_number : 0001595\n"
+    "    study_protocol_description :\n"
+    "      Mosquitoes were caught using a trap containing small non-human animal bait\n"
 }
 att_dic={
 "  light : IRO:0000139",
@@ -106,9 +123,10 @@ att_dic={
 "  No attractant used : IRO:0000153",
 "  hay or grass infusion: IRO:0000037",
 "  alfalfa infusion : IRO:0001059",
-"  octenol : IRO:0000036"
-"  live animal bait: IRO : 0000157"
-"  live chicken bait: IRO : 0000158"
+"  octenol : IRO:0000036",
+"  live animal bait: IRO:0000157",
+"  live chicken bait: IRO:0000158",
+"  organic infusion: IRO:0001058"
 }
 sex_dic={
 "  female : PATO:0000383",
@@ -130,7 +148,6 @@ species_dic={
 "  Aedes burgeri : VBsp:0001180",
 "  Aedes c. canadensis : VBsp:0000996",
 "  Aedes c. mathesoni : VBsp:0000997",
-
 "  Aedes cantator : VBsp:0001000",
 "  Aedes cataphylla : VBsp:0001004",
 "  Aedes churchillensis : VBsp:0001007",
@@ -138,7 +155,7 @@ species_dic={
 "  Aedes clivis : VBsp:0001009",
 "  Aedes communis : VBsp:0001011",
 "  Aedes decticus : VBsp:0001018",
-"  Aedes aegypti ",
+"  Aedes aegypti : VBsp:0000518",
 "  Aedes deserticola : VBsp:0001020",
 "  Aedes diantaeus : VBsp:0001022",
 "  Aedes dorsalis VSMO:0000674",
@@ -310,7 +327,17 @@ species_dic={
 "  Wyeomyia smithii : VBsp:0001879",
 "  Wyeomyia sp. : VBsp:0001772",
 "  Wyeomyia vanduzeei : VBsp:0001884",
-"  Mosquito  "
+"  Mosquito  ",
+"  genus Mansonia : VBsp:0001252",
+"  genus Uranotaenia : VBsp:0001927",
+"  genus Wyeomyia : VBsp:0001772",
+"  genus Culex : VBsp:0002423",
+"  genus Coquillettidia : VBsp:0002312",
+"  genus Culiseta : VBsp:0002373",
+"  Culicidae : VBsp:0003818",
+"  genus Psorophora : VBsp:0001304",
+"  genus Anopheles : VBsp:0000015",
+"  genus Aedes : VBsp:0000253"
 }
 #End dictionary creations
 #line = f.readline()
