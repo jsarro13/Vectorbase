@@ -11,6 +11,14 @@
 #05-30-2019: Added species and trap type options
 #06-4-2019:  Added new species info and trap options
 #06-5-2019:  Added new species
+#06-6-2019:  Added new species
+#06-11-2019: Added pathogen data option
+#06-26-2019:  Added new species
+#06-27-2019:  Added new attractants
+#07-05-2019: Fixed pathogen option and added new options. Added pathogen testing option.
+#07-09-2019: Added Ramp and LAMP to protocol types
+#07-11-2019: Added magnet pro trap
+#07/17/2019: added heat as attract
 import os
 import argparse
 ##define options
@@ -42,7 +50,11 @@ parser.add_argument('-g', type=str,
 parser.add_argument('-x', type=str, required=True,
                    help='Sex. Seperate by commas if there are multiple.')
 parser.add_argument('-y', type=int, required=True,
-                   help='Year.')
+                   help='Year of submission.')
+parser.add_argument('-P', type=str, required=False,
+                   help='Pathogen information.')
+parser.add_argument('-p', type=str, required=False,
+                   help='Pathogen test information.')
 parser.add_argument('-o', type=str, required=True,
                    help='Output file name.')
 args = parser.parse_args()
@@ -65,6 +77,48 @@ stage_dic={
 "  adult : IDOMAL:0000655",
 "  larva : IDOMAL:0000653"
 }
+ptest_dic={
+"  - study_protocol_name : RTPCR\n"
+   "    study_protocol_type : real time PCR\n"
+   "    study_protocol_type_term_source_ref : MIRO\n"
+   "    study_protocol_type_term_accession_number : 20000108\n"
+   "    study_protocol_description :\n"
+   "      Real Time PCR or quantitative PCR (qPCR)\n",
+
+"  - study_protocol_name : RT-PCR\n"
+   "    study_protocol_type : reverse transcriptase PCR\n"
+   "    study_protocol_type_term_source_ref : MIRO\n"
+   "    study_protocol_type_term_accession_number : 20000035\n"
+   "    study_protocol_description :\n"
+   "      RT-PCR based assay (Reverse Transcriptase - PCR) \n",
+
+"  - study_protocol_name : RAMP\n"
+   "    study_protocol_type : RAMP assay\n"
+   "    study_protocol_type_term_source_ref : IRO\n"
+   "    study_protocol_type_term_accession_number : 0000164\n"
+   "    study_protocol_description :\n"
+   "       Rapid Analyte Measurement Platform \n",
+
+"  - study_protocol_name : LAMP\n"
+   "    study_protocol_type : LAMP assay\n"
+   "    study_protocol_type_term_source_ref : IRO\n"
+   "    study_protocol_type_term_accession_number : 0000165\n"
+   "    study_protocol_description :\n"
+   "      Loop-mediated isothermal amplification\n"
+}
+path_dic={
+"  arthropod infection status : VSMO:0000009",
+"  negative : PATO:0000462 # absent",
+"  positive : PATO:0000467 # present",
+"  WNV : VSMO:0000535",
+"  west nile virus : VSMO:0000535",
+"  SLEV : VSMO:0000882",
+"  WEEV : VSMO:0001206",
+"  CHIKV : VSMO:0001209",
+"  DENV : VSMO:0000878",
+"  ZIKV : VSMO:0001977"
+}
+
 id_dic={
 "  - study_protocol_name : MORPHO\n"
    "    study_protocol_type : morphological identification\n"
@@ -102,6 +156,13 @@ trap_dic={
     "    study_protocol_description :\n"
     "      Mosquitoes were caught using a Biogents BG-Sentinel trap\n",
 
+"  - study_protocol_name : MAGPRO\n"
+    "    study_protocol_type : mosquito magnet pro catch\n"
+    "    study_protocol_type_term_source_ref : IRO\n"
+    "    study_protocol_type_term_accession_number : 0000022\n"
+    "    study_protocol_description :\n"
+    "      Mosquitoes were caught using a mosquito magnet pro catch\n",
+
 "  - study_protocol_name : Collection\n"
     "    study_protocol_type : collection of arthropods\n"
     "    study_protocol_type_term_source_ref : VSMO\n"
@@ -110,11 +171,11 @@ trap_dic={
     "      The process of gathering arthropod specimens.\n",
 
 "  - study_protocol_name : Exit\n"
-    "    study_protocol_type : trap containing small non-human animal bait\n"
+    "    study_protocol_type : \n"
     "    study_protocol_type_term_source_ref : VSMO\n"
-    "    study_protocol_type_term_accession_number : 0001595\n"
+    "    study_protocol_type_term_accession_number : \n"
     "    study_protocol_description :\n"
-    "      Mosquitoes were caught using a trap containing small non-human animal bait\n"
+    "      \n"
 }
 att_dic={
 "  light : IRO:0000139",
@@ -124,9 +185,11 @@ att_dic={
 "  hay or grass infusion: IRO:0000037",
 "  alfalfa infusion : IRO:0001059",
 "  octenol : IRO:0000036",
-"  live animal bait: IRO:0000157",
-"  live chicken bait: IRO:0000158",
-"  organic infusion: IRO:0001058"
+"  live animal bait : IRO:0000157",
+"  live chicken bait : IRO:0000158",
+"  organic infusion : IRO:0001058",
+"  heat : IRO:0000190",
+"  octenol : IRO:0000036"
 }
 sex_dic={
 "  female : PATO:0000383",
@@ -337,7 +400,14 @@ species_dic={
 "  Culicidae : VBsp:0003818",
 "  genus Psorophora : VBsp:0001304",
 "  genus Anopheles : VBsp:0000015",
-"  genus Aedes : VBsp:0000253"
+"  genus Aedes : VBsp:0000253",
+"  genus Culicoides : VBsp:0003953",
+"  genus Lutzomyia : VBsp:0004027",
+"  Culex abominator : VBsp:0002996",
+"  Ceratopogonidae : VBsp:0003950",
+"  Simuliidae : VBsp:0004004",
+"  Ochlerotatus : VBsp:0000960",
+"  genus Psorophora : VBsp:0001304"	
 }
 #End dictionary creations
 #line = f.readline()
@@ -362,7 +432,17 @@ if full=="y":
 	print >> G, "#"
 	print >> G, "# contains everything needed to convert SAF files to full ISA-Tab"
 	print >> G, ""
-
+	#print "Enter study indentifier."
+        #study_id=raw_input("")
+        study_id=args.sid
+        print >> G, "study_identifier :",study_id
+        #print "Enter study title."
+        #study_title=raw_input("")
+        study_title=args.st
+        print >> G, "study_title :",study_title
+        print >> G, "study_submission_date :",args.y
+        print >> G, "study_description :"
+        print >> G, ""
 	print >> G, "study_publications : 10.5281/zenodo.1220222"
   	print >> G, " - study_publication_doi : "
 	print >> G, "   study_publication_author_list : Smith J and Walker M"
@@ -378,17 +458,6 @@ if full=="y":
 	print >> G, "    study_person_first_name : John"
 	print >> G, "    study_person_email : john@smith.com"
 	print >> G, "    study_person_address : Smith's University, Smithson, NM, USA"
-	print >> G, ""
-	#print "Enter study indentifier."
-	#study_id=raw_input("")
-	study_id=args.sid
-	print >> G, "study_identifier :",study_id
-	#print "Enter study title."
-	#study_title=raw_input("")
-	study_title=args.st
-	print >> G, "study_title :",study_title
-	print >> G, "study_submission_date :",args.y
-	print >> G, "study_description :"
 	print >> G, ""
 	print >> G, "study_protocols :"
 	trap_list=args.t
@@ -414,6 +483,18 @@ if full=="y":
                                 print >> G, idic
                 if found==False:
                         print "Warning:",sp, "not found in identification method dictionary."
+        if args.p :
+                path_list=args.p
+                path_split=path_list.split(",")
+                for ph in path_split:
+                        #print(sp)
+                        found=False
+                        for pdic in ptest_dic:
+                                if ph.lower() in pdic.lower():
+                                        found=True
+                                        print >> G, pdic
+                        if found==False:
+                                print "Warning:",ph, "not found pathogen test dictionary."
 	print >> G, "#"
 	print >> G, "# list the species expected to be identified"
 	print >> G, "# and their VBsp:nnnnnnn ontology term accessions"
@@ -494,8 +575,24 @@ if full=="y":
                         	if sp.lower() in gondic.lower():
 					found=True
                                 	print >> G, gondic
-		if found==False:
-                	print "Warning:",sp, "not found in feeding and gonotrophic dictionary."
+			if found==False:
+                		print "Warning:",sp, "not found in feeding and gonotrophic dictionary."
+	if args.P :
+		path_list=args.P
+        	if path_list is not None:
+                	sp_path=path_list.split(",")
+                	for sp in sp_path:
+                        	#print(sp)
+                        	found=False
+                        	for pathdic in path_dic:
+                                	if sp.lower() in pathdic.lower():
+                                        	found=True
+                                        	print >> G, pathdic
+                		if found==False:
+                        		print "Warning:",sp, "not found in pathogen dictionary."
+
+
+##############################3
 #elif full=="n":
 else:
 	#print "No"
@@ -542,6 +639,18 @@ else:
                                 print >> G, idic
                 if found==False:
                         print "Warning:",sp, "not found in identification method dictionary."
+	if args.p :	
+		path_list=args.p
+	        path_split=path_list.split(",")
+        	for ph in path_split:
+                	#print(sp)
+                	found=False
+                	for pdic in ptest_dic:
+                        	if ph.lower() in pdic.lower():
+                                	found=True
+					print >> G, pdic
+                	if found==False:
+                        	print "Warning:",ph, "not found pathogen test dictionary."
 	print >> G, "#"
 	print >> G, "# list the species expected to be identified"
 	print >> G, "# and their VBsp:nnnnnnn ontology term accessions"
@@ -622,6 +731,19 @@ else:
                         	if sp.lower() in gondic.lower():
 					found=True
                                 	print >> G, gondic
-		if found==False:
-                	print "Warning:",sp, "not found in feeding and gonotrophic dictionary."
+			if found==False:
+                		print "Warning:",sp, "not found in feeding and gonotrophic dictionary."
+	if args.P :
+		path_list=args.P
+        	if path_list is not None:
+                	sp_path=path_list.split(",")
+                	for sp in sp_path:
+                        	#print(sp)
+                        	found=False
+                        	for pathdic in path_dic:
+                                	if sp.lower() in pathdic.lower():
+                                        	found=True
+                                        	print >> G, pathdic
+                		if found==False:
+                        		print "Warning:",sp, "not found in pathogen dictionary."
 G.close()
