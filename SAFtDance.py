@@ -7,7 +7,7 @@
 #files to be opened and written.  F needs to be changed to match your .txt file before running as does datafile below.  
 import os
 f = open('2017_full_Data.txt', 'r')
-G= open('SAF_2017.out.txt','w')
+G= open('SAF_2017.out..test.txt','w')
 #read in header file to save and print species names later
 line = f.readline()
 field=line.split("	")
@@ -25,7 +25,7 @@ print >> G, "species","	","sample_count"
 curline=1
 for lines in f:
 	curline +=1
-	print curline
+	#print curline
 	fields = lines.split("	")
 	sq=fields[0]
 	#print sq
@@ -36,7 +36,7 @@ for lines in f:
 		#	print x
 		#	exit()
 		cur=fields[x]
-		print cur
+		#print cur
 		if cur == "#@": #Note I used #@ as a unique identifier to deal with blank cells. THis can be changed to anything.
 			pass
 		elif int(cur) > 0:
@@ -45,6 +45,7 @@ for lines in f:
 			for y in range(0,13):
 				print >> G, fields[y],"	",
 			print >> G, species,"	",cur
+			print species+cur
 	if any == False:
 		for y in range(0,13):
                                 print >> G, fields[y],"	",
