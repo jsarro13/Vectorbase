@@ -169,4 +169,4 @@ for line in datafile:
                 twentythree ="BLANK"
                 twentyfour ="BLANK"
 
-
+G.close()

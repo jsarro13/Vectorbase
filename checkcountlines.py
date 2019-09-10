@@ -111,3 +111,4 @@ for line in datafile:
 		twentytwo =field[22]
 		twentythree =field[23]
 		twentyfour = field[24]
+G.close()
