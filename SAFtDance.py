@@ -7,7 +7,7 @@
 #files to be opened and written.  F needs to be changed to match your .txt file before running as does datafile below.  
 import os
 f = open('2017_full_Data.txt', 'r')
-G= open('SAF_2017.out..test.txt','w')
+G= open('SAF_2017.out.test.txt','w')
 #read in header file to save and print species names later
 line = f.readline()
 field=line.split("	")
